@@ -1,3 +1,4 @@
+//function set the time in the webpage
 function setTime(){
     var currentDate_div = $("#currentDay");
     var date = moment().format("dddd, MMMM Do YYYY, h:mm a");
@@ -5,6 +6,8 @@ function setTime(){
     
 }
 
+
+//main functions creates all html alements to be used
 function displayList(){
     var container = $(".container");
     var current_Hour = moment().format("H");
@@ -14,6 +17,7 @@ function displayList(){
         
         var list_div = document.createElement("div");
         list_div.setAttribute("style","display:flex;");
+        
 
         var input_Element = document.createElement("input");
         input_Element.setAttribute("placeholder","Add task");
@@ -38,6 +42,12 @@ function displayList(){
             input_Element.setAttribute("disabled","");
 
         }
+
+        if(index == current_Hour){
+            input_Element.setAttribute("style","background-color: #82E0AA;");
+            label_Element.setAttribute("style","background-color: #82E0AA;");
+        }
+            
         
         if(index <=12)  
             label_Element.textContent = index + ":00 am";
@@ -59,11 +69,9 @@ function displayList(){
 
     loadStoraged();
     
-
-
 }
 
-
+//get the local storaged and fill the inputtexts with all array values
 function loadStoraged(){
 
     if(JSON.parse(localStorage.getItem("tasks"))){
@@ -76,15 +84,13 @@ function loadStoraged(){
     }
         
     else
-        console.log("not storaged")
+        console.log("not storaged");
 
     
-    
-
-
-
 }
 
+
+// set the local storage the value of the input text
 function setStoraged(taskid,input_id,tasktosave){
     
 
@@ -95,15 +101,12 @@ function setStoraged(taskid,input_id,tasktosave){
 
   
     tasks[taskid]= tasktosave;
-
     localStorage.setItem("tasks", JSON.stringify(tasks));
-
-
-    
 
 }
 
 
+//clear the task depends the button was clicked
 function clearTasks(input_id,taskid){
 
     $(input_id).val("");
@@ -113,36 +116,37 @@ function clearTasks(input_id,taskid){
 
     localStorage.setItem("tasks", JSON.stringify(tasks));
 
-
 }
 
-
 //Functions RUNS at the beggining
+// set the time formated
 setTime();
-//localStorage.clear();
+//displays all the elements and load locarstorage
 displayList();
 
-
+//listener of the button when is clicked
 $(".save-button").click(function(event){
-    
-
     var input_id = "#input"+this.id;
     var tasktosave = $(input_id).val();
     
     setStoraged(this.id,input_id,tasktosave);
 
-    if($(input_id).val()==""){
+    if($(input_id).val()=="")
         clearTasks(input_id,this.id);
 
-    }
-    displayList();
+    loadStoraged();
 
 });
 
 
-
+//delete button deletes the task of the array and clears the input text
 $(".delete-button").click(function(event){
     var input_id = "#input"+this.id;
     clearTasks(input_id,this.id);
-
+    loadStoraged();
 });
+
+
+
+
+
